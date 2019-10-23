@@ -45,6 +45,7 @@ public class FileUtils {
 
             // Read the file line by line
             boolean firstLine = true;
+            boolean epoch = true;
             while ((line = fileReader.readLine()) != null) {
                 // Get all tokens available in line.
                 String[] tokens = line.split(delimiter);
@@ -52,12 +53,18 @@ public class FileUtils {
                 
                 // Check for the case where there is more than one line preceding the data 
                 if (firstLine == true) {
-                    if (!isNumeric(tokens[0]) && tokens[0].equals("timestamp") == false) {
+                    if (!isNumeric(tokens[0]) && tokens[0].equals("date") == false && tokens[0].equals("timestamp") == false) {
                         continue;
+                    }
+                    else if (tokens[0].equals("timestamp")) {
+                        epoch=true;
+                    }
+                    else if (tokens[0].equals("date")) {
+                        epoch=false;
                     }
                 }
                 if (firstLine == false && tokens.length > 1) {
-                    curTimestamp = (new Double(tokens[0])).longValue();
+                    curTimestamp = getEpoch(tokens[0], epoch);
                 }
                 for (int i = 1; i < tokens.length; i++) {
                     // Assume that the first line contains the column names.
@@ -69,7 +76,7 @@ public class FileUtils {
                             ts.meta.name = tokens[i];
                         } else {
                             ts.meta.name = "metric_" + i;
-                            output.get(i - 1).append((new Double(tokens[0])).longValue(),
+                            output.get(i - 1).append(getEpoch(tokens[0], epoch),
                                     new Float(tokens[i]));
                         }
                     } else {
@@ -120,6 +127,10 @@ public class FileUtils {
             }
         }
         return output;
+    }
+
+    private static long getEpoch(String s, boolean epoch) {
+        return epoch?(new Double(s)).longValue():DateTimeCalculator.getDate(s).getTime();
     }
         
     // Checks if the string is numeric.

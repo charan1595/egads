@@ -23,7 +23,10 @@ public class DateTimeCalculator {
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS"),
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:S"),
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
-            new SimpleDateFormat("yyyy-MM-dd") };
+            new SimpleDateFormat("yyyy-MM-dd"),
+            new SimpleDateFormat("yyyyMMdd"),
+            new SimpleDateFormat("yyyyMMddHH")
+    };
     private static SimpleDateFormat outputFormatter = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
 
